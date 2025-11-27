@@ -1,0 +1,37 @@
+{% extends 'todo/base.html' %}
+
+{% block title %}TODO List - Home{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>TODO List</h1>
+    <a href="{% url 'todo_create' %}" class="btn btn-primary">Add New TODO</a>
+</div>
+
+{% if todos %}
+    {% for todo in todos %}
+    <div style="background: white; padding: 15px; margin: 10px 0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; {% if todo.completed %}opacity: 0.6;{% endif %}">
+        <div style="flex-grow: 1;">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 5px; {% if todo.completed %}text-decoration: line-through;{% endif %}">
+                {{ todo.title }}
+            </div>
+            {% if todo.description %}
+            <div style="color: #666; font-size: 14px;">{{ todo.description }}</div>
+            {% endif %}
+            <small style="color: #999;">Created: {{ todo.created_at|date:"M d, Y H:i" }}</small>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-success">
+                {% if todo.completed %}Undo{% else %}Complete{% endif %}
+            </a>
+            <a href="{% url 'todo_update' todo.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div style="background: white; padding: 15px; margin: 10px 0; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <p>No todos yet. Create your first one!</p>
+    </div>
+{% endif %}
+{% endblock %}

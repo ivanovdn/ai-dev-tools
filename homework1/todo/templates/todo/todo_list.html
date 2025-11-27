@@ -1,0 +1,32 @@
+{% extends 'todo/base.html' %}
+
+{% block header_actions %}
+<a href="{% url 'todo_create' %}" class="btn btn-primary">Add New TODO</a>
+{% endblock %}
+
+{% block content %}
+{% if todos %}
+    {% for todo in todos %}
+    <div class="todo-item {% if todo.completed %}completed{% endif %}">
+        <div class="todo-content">
+            <div class="todo-title">{{ todo.title }}</div>
+            {% if todo.description %}
+            <div class="todo-description">{{ todo.description }}</div>
+            {% endif %}
+            <small style="color: #999;">Created: {{ todo.created_at|date:"M d, Y H:i" }}</small>
+        </div>
+        <div class="todo-actions">
+            <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-success">
+                {% if todo.completed %}Undo{% else %}Complete{% endif %}
+            </a>
+            <a href="{% url 'todo_update' todo.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="todo-item">
+        <p>No todos yet. Create your first one!</p>
+    </div>
+{% endif %}
+{% endblock %}
